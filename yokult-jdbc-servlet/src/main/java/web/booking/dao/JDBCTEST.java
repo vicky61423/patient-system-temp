@@ -29,8 +29,8 @@ public class JDBCTEST {
 				){
 			JDBCTEST dao = new JDBCTEST();
 			dao.connection = connection1;
-			System.out.println(dao.selectDoctorSchedule(Date.valueOf("2022-07-12"), Date.valueOf("2022-07-20"),1));
-			
+//			System.out.println(dao.selectDoctorSchedule(Date.valueOf("2022-07-12"), Date.valueOf("2022-07-20"),1));
+			System.out.println(dao.insertBookingIntoPatient("TGA001", "F123555666", Date.valueOf("2022-07-15"), "早", 2, 1));
 			
 			
 			
@@ -39,28 +39,23 @@ public class JDBCTEST {
 		}
 	}
 	
-	public List<DoctorSchedule> selectDoctorSchedule(Date date1, Date date2, Integer doctorId) {
-		String sql = "SELECT DOCTOR_SCHEDULE_DATE, DOCTOR_AMPM FROM  DOCTOR_SCHEDULE WHERE DOCTOR_ID = ? "
-				+ "AND DOCTOR_STATUS = 1 AND DOCTOR_SCHEDULE_DATE BETWEEN ? AND ? ORDER BY DOCTOR_SCHEDULE_DATE;";
-		try {
-			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, doctorId);
-			ps.setDate(2, date1);
-			ps.setDate(3, date2);
-			ResultSet rs = ps.executeQuery();
-			List<DoctorSchedule> list = new ArrayList<DoctorSchedule>();
-			while(rs.next()) {
-				DoctorSchedule ds = new DoctorSchedule();
-				ds.setDoctorScheduleDate(rs.getDate(1));
-				ds.setDoctorAmpm(rs.getString(2));
-				list.add(ds);
+	public int insertBookingIntoPatient(String memId, String patientIdcard, Date bookingDate, String amPm, Integer bookingNumber, Integer doctorId) {
+		String sql = "INSERT INTO PATIENT(MEMID, PATIENT_IDCARD, BOOKING_DATE, AMPM, BOOKING_NUMBER, DOCTOR_ID) VALUES (?, ?, ?, ?, ?, ?);";
+			try {
+				PreparedStatement ps = this.connection.prepareStatement(sql);
+				ps.setString(1, memId);
+				ps.setString(2, patientIdcard);
+				ps.setDate(3, bookingDate);
+				ps.setString(4, amPm);
+				ps.setInt(5, bookingNumber);
+				ps.setInt(6, doctorId);
+				return ps.executeUpdate();
+
+			} catch (SQLException e) {
+				System.out.println("insertBookingIntoPatient failure");
+				e.printStackTrace();
+				return -1;
 			}
-			return list;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	};
 
 }

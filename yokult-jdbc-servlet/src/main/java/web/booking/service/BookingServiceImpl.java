@@ -9,7 +9,9 @@ import javax.naming.NamingException;
 
 import web.booking.dao.DoctorDAOJDBC;
 import web.booking.dao.DoctorScheduleDAOJDBC;
+import web.booking.dao.PatientDAOJDBC;
 import web.booking.vo.DoctorSchedule;
+import web.booking.vo.Patient;
 
 public class BookingServiceImpl {
 	//例外通常是放在service層 才能夠決定導向到哪裡去 不要在DAOimpl把exception處理掉
@@ -17,12 +19,14 @@ public class BookingServiceImpl {
 	public BookingServiceImpl() {
 	}
 
-	public static void main(String[] args) {
-		
+	//組裝會員編號和要booking的時段，並回傳是否新增成功 把object資料拿出來
+	public int setPatientBooking(String memId, Patient patient) throws NamingException {
+		PatientDAOJDBC patientDAOJDBC = new PatientDAOJDBC();
+		int result = patientDAOJDBC.insertBookingIntoPatient(memId, patient.getPatientIdcard(), patient.getBookingDate(), patient.getAmPm(), patient.getBookingNumber(), patient.getDoctorId());
+		return result;
 	}
-
-	// 回傳 日期區間為? 醫師編號為? 的 醫師姓名、醫師看診日期、醫師時段
-	// 組裝日期 時段和姓名
+	
+	// 組裝日期 醫師有上班的時段和姓名
 	public Map<String, Object> getDoctorScheduleAndDoctorName(Date date1, Date date2,Integer doctorId) throws NamingException {
 		List<DoctorSchedule> listDr = new DoctorScheduleDAOJDBC().selectDoctorSchedule(date1, date2, doctorId);
 		String drName = new DoctorDAOJDBC().selectDoctorNameById(doctorId);
@@ -33,6 +37,7 @@ public class BookingServiceImpl {
 		return map;
 	}
 	
+	// Overloading組裝日期 醫師有上班的時段和姓名
 	public Map<String, Object> getDoctorScheduleAndDoctorName(String date1, String date2,String doctorId) throws NamingException {
 //		Integer.valueOf(doctorId);
 		List<DoctorSchedule> listDr = new DoctorScheduleDAOJDBC().selectDoctorSchedule(java.sql.Date.valueOf(date1), java.sql.Date.valueOf(date2), Integer.valueOf(doctorId));

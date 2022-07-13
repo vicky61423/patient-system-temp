@@ -26,13 +26,13 @@ public class DoctorSchedule implements Serializable {
 //	@Column(name = "DOCTOR_AMPM")
 	private String doctorAmpm;
 //	@Column(name = "DOCTOR_STATUS")
-	private boolean doctorStatus;
+	private Integer doctorStatus;
 	
 	public DoctorSchedule() {
 		super();
 	}
 	public DoctorSchedule(Integer serialNumber, String doctorAlphabet, Integer doctorId, Date doctorScheduleDate,
-			String doctorAmpm, boolean doctorStatus) {
+			String doctorAmpm, Integer doctorStatus) {
 		super();
 		this.serialNumber = serialNumber;
 		this.doctorAlphabet = doctorAlphabet;
@@ -71,10 +71,10 @@ public class DoctorSchedule implements Serializable {
 	public void setDoctorAmpm(String doctorAmpm) {
 		this.doctorAmpm = doctorAmpm;
 	}
-	public boolean isDoctorStatus() {
+	public Integer isDoctorStatus() {
 		return doctorStatus;
 	}
-	public void setDoctorStatus(boolean doctorStatus) {
+	public void setDoctorStatus(Integer doctorStatus) {
 		this.doctorStatus = doctorStatus;
 	}
 	@Override
