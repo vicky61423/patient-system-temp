@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import web.booking.vo.DoctorSchedule;
+import web.booking.vo.Patient;
 
 public class JDBCTEST {
 	private Connection connection;
@@ -30,7 +31,9 @@ public class JDBCTEST {
 			JDBCTEST dao = new JDBCTEST();
 			dao.connection = connection1;
 //			System.out.println(dao.selectDoctorSchedule(Date.valueOf("2022-07-12"), Date.valueOf("2022-07-20"),1));
-			System.out.println(dao.insertBookingIntoPatient("TGA001", "F123555666", Date.valueOf("2022-07-15"), "早", 2, 1));
+//			System.out.println(dao.insertBookingIntoPatient("TGA001", "F123555666", Date.valueOf("2022-07-15"), "早", 2, 1));
+//			System.out.println(dao.selectPatientBypatientIdcard("A123456788", 0));
+			System.out.println(dao.updatePatientByBookingDateAndCheckinCondition("F123555666", Date.valueOf("2022-07-15"),2));
 			
 			
 			
@@ -39,23 +42,24 @@ public class JDBCTEST {
 		}
 	}
 	
-	public int insertBookingIntoPatient(String memId, String patientIdcard, Date bookingDate, String amPm, Integer bookingNumber, Integer doctorId) {
-		String sql = "INSERT INTO PATIENT(MEMID, PATIENT_IDCARD, BOOKING_DATE, AMPM, BOOKING_NUMBER, DOCTOR_ID) VALUES (?, ?, ?, ?, ?, ?);";
+	
+	//(刪除/修改)病患身份證字號為A123456788 看診預約日期為=?? 預約狀態為=?
+	// 刪除病患身份證字號為A123456788 看診預約日期為??=? 預約狀態為? =1
+	// 修改病患身份證字號為A123456788 看診預約日期為 =今天 預約狀態為=1
+		public int updatePatientByBookingDateAndCheckinCondition(String patientIdcard, Date bookingDate,Integer checkinCondition ) {
+		String sql = "UPDATE PATIENT SET BOOKING_NUMBER = ? WHERE PATIENT_IDCARD = ? AND BOOKING_DATE = ? ;";
 			try {
 				PreparedStatement ps = this.connection.prepareStatement(sql);
-				ps.setString(1, memId);
+				ps.setInt(1, checkinCondition);
 				ps.setString(2, patientIdcard);
 				ps.setDate(3, bookingDate);
-				ps.setString(4, amPm);
-				ps.setInt(5, bookingNumber);
-				ps.setInt(6, doctorId);
 				return ps.executeUpdate();
-
 			} catch (SQLException e) {
-				System.out.println("insertBookingIntoPatient failure");
+				System.out.println("selectPatientBypatientIdcard failure");
 				e.printStackTrace();
-				return -1;
 			}
+			return -1;
+			
 	};
 
 }

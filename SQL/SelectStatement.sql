@@ -1,44 +1,53 @@
 # ===========patientBooking.html============
 SELECT * FROM yokult.DOCTOR_SCHEDULE;
--- 查詢列出日期區間為7/13~7/17的醫師編號為1、醫生狀態為1的 醫師姓名、醫師看診日期、醫師時段
+-- 改版\查詢列出日期區間為7/13~7/17的醫師編號為1、醫生狀態為1的 醫師姓名、醫師看診日期、醫師時段
 -- SELECT D.DOCTOR_NAME, DS.DOCTOR_SCHEDULE_DATE, DS.DOCTOR_AMPM FROM  DOCTOR_SCHEDULE AS DS 
 -- JOIN DOCTOR AS D ON D.DOCTOR_ID = DS.DOCTOR_ID
 -- WHERE DS.DOCTOR_ID = 1 AND DS.DOCTOR_STATUS = 1 
 -- AND DS.DOCTOR_SCHEDULE_DATE BETWEEN "2022/7/13" AND "2022/07/15" ORDER BY DS.DOCTOR_SCHEDULE_DATE;
 
+-- OK\查詢列出日期區間為7/13~7/17的醫師編號為1、醫生狀態為1的 醫師姓名、醫師看診日期、醫師時段
 SELECT DOCTOR_SCHEDULE_DATE, DOCTOR_AMPM FROM  DOCTOR_SCHEDULE WHERE DOCTOR_ID = 1 AND DOCTOR_STATUS = 1 AND DOCTOR_SCHEDULE_DATE BETWEEN "2022/7/13" AND "2022/07/15" ORDER BY DS.DOCTOR_SCHEDULE_DATE;
 
--- 新增一筆醫師看診日期=? 醫師看診時段=? 病患身份證字號為=? 醫師編號=? 的掛號資料在PATIENT
+-- OK\新增一筆醫師看診日期=? 醫師看診時段=? 病患身份證字號為=? 醫師編號=? 的掛號資料在PATIENT
 INSERT INTO PATIENT(MEMID, PATIENT_IDCARD, BOOKING_DATE, AMPM, BOOKING_NUMBER, DOCTOR_ID) VALUES 
 (?, ?, ?, ?, ?, ?);
 
 # ===========patientbBookingQuery.html=============
 SELECT * FROM yokult.PATIENT;
--- 查詢列出病患身份證字號為A123456788 預約狀態為0(未刪除未看診)的
--- 看診預約日期、預約時段、預約醫師姓名、預約號碼
+-- 改版\ 查詢列出病患身份證字號為A123456788 預約狀態為0(未刪除未看診)的看診預約日期、預約時段、預約醫師姓名、預約號碼
 SELECT P.BOOKING_DATE, P.AMPM, D.DOCTOR_NAME, P.BOOKING_NUMBER FROM PATIENT AS P
 JOIN DOCTOR AS D ON D.DOCTOR_ID = P.DOCTOR_ID
 WHERE P.PATIENT_IDCARD = "A123456788" AND P.CHECKIN_CONDITION = 0;
+-- 不要join
+-- OK\查詢列出病患身份證字號為?預約狀態為?()的病患table所有欄位  看診預約日期、預約時段、預約醫師姓名、預約號碼	
+SELECT SERIAL_NUMBER, MEMID, PATIENT_IDCARD, BOOKING_DATE, AMPM, BOOKING_NUMBER, DOCTOR_ALPHABET, DOCTOR_ID, CHECKIN_CONDITION ,CHART FROM PATIENT WHERE PATIENT_IDCARD = "A123456788" AND CHECKIN_CONDITION = 0 ORDER BY BOOKING_DATE;
 
--- (刪除)修改病患身份證字號為A123456788 看診預約日期為?? 預約狀態為2
-UPDATE PATIENT SET BOOKING_NUMBER = 2
+SELECT * FROM YOKULT.PATIENT;
+
+-- 改版\(刪除)修改病患身份證字號為A123456788 看診預約日期為?? 預約狀態為2
+UPDATE PATIENT SET CHECKIN_CONDITION = 2
 WHERE PATIENT_IDCARD = "A123456788" AND BOOKING_DATE = "2022-07-12";
-
 # =========== patienCheckIn ==========
--- 修改病患身份證字號為A123456788 看診預約日期為今天 預約狀態為1
-UPDATE PATIENT SET BOOKING_NUMBER = 1
+-- 改版\修改病患身份證字號為A123456788 看診預約日期為今天 預約狀態為1
+UPDATE PATIENT SET CHECKIN_CONDITION = 1
 WHERE PATIENT_IDCARD = "A123456788" AND BOOKING_DATE = CURDATE();
+-- OK\(刪除/修改)病患身份證字號為A123456788 看診預約日期為=?? 預約狀態為=?
+UPDATE PATIENT SET CHECKIN_CONDITION = ? WHERE PATIENT_IDCARD = ? AND BOOKING_DATE = ? ;
 
 #============ patientChartQuery.html==========
 -- 做相互查詢!!
--- 列出某病人的所有看診狀態= 1 的看診日期
+-- 改版\列出某病人的所有看診狀態= 1 #的看診日期
 SELECT BOOKING_DATE FROM PATIENT 
 WHERE PATIENT_IDCARD = "?" AND CHECKIN_CONDITION = 1 ;
--- 列出某病人的所有看診狀態= 1 的看診醫師
+-- 改版\列出某病人的所有看診狀態= 1 #的看診醫師
 SELECT DOCTOR_ID FROM PATIENT 
 WHERE PATIENT_IDCARD = "?" AND CHECKIN_CONDITION = 1 ;
+-- OK//查詢列出病患身份證字號為?預約狀態為?()的病患table所有欄位
 
--- 查詢列出PATIENT_IDCARD = ? BOOKING_DATE=? DOCTOR_ID=? 的病歷資料
+
+
+-- 查詢列出PATIENT_IDCARD = ? BOOKING_DATE=? DOCTOR_ID=? #的病歷資料
 SELECT CHART FROM PATIENT 
 WHERE PATIENT_IDCARD = "?" AND BOOKING_DATE="?" AND DOCTOR_ID = "?" AND CHECKIN_CONDITION = 1 ;
 
