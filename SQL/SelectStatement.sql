@@ -1,6 +1,6 @@
 # ===========patientBooking.html============
 SELECT * FROM yokult.DOCTOR_SCHEDULE;
--- 改版\查詢列出日期區間為7/13~7/17的醫師編號為1、醫生狀態為1的 醫師姓名、醫師看診日期、醫師時段
+-- 改版\查詢列出日期區間為7/13~7/17的醫師編號為1DOCTOR、醫生狀態為1的 醫師姓名、醫師看診日期、醫師時段
 -- SELECT D.DOCTOR_NAME, DS.DOCTOR_SCHEDULE_DATE, DS.DOCTOR_AMPM FROM  DOCTOR_SCHEDULE AS DS 
 -- JOIN DOCTOR AS D ON D.DOCTOR_ID = DS.DOCTOR_ID
 -- WHERE DS.DOCTOR_ID = 1 AND DS.DOCTOR_STATUS = 1 
