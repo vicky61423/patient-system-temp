@@ -44,11 +44,11 @@ public class BookingServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 //		BookingServlet servlet = new BookingServlet();???
 		
-//		out.append(gson.toJson(sendJsonOfDoctorScheduleAndDoctorName(gson, br)));
+		out.append(gson.toJson(sendJsonOfDoctorScheduleAndDoctorName(gson, br)));
 //		out.append(gson.toJson(receiveBookingRequest(gson, br, "TGA001")));
 //		out.append(gson.toJson(servlet.patientCheckin(gson, br)));
 //		out.append(gson.toJson(bookingQuery(gson, "TGA001")));
-		out.append(gson.toJson(cancelBooking(gson, br)));
+//		out.append(gson.toJson(cancelBooking(gson, br)));
 		
 		
 		

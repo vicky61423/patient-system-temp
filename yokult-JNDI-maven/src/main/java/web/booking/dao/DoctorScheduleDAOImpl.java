@@ -68,6 +68,46 @@ public class DoctorScheduleDAOImpl implements DoctorScheduleDAO {
 		return null;
 	}
 
+
+	@Override
+	public int insert(DoctorSchedule doctorSchedule) {
+		String sql = "INSERT INTO DOCTOR_SCHEDULE(DOCTOR_ID, DOCTOR_SCHEDULE_DATE, DOCTOR_AMPM ,DOCTOR_STATUS) VALUES(?, ?, ?, ?);";
+		try ( Connection connection =  dataSource.getConnection();){
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setInt(1, doctorSchedule.getDoctorId());
+		ps.setDate(2, doctorSchedule.getDoctorScheduleDate());
+		ps.setString(3, doctorSchedule.getDoctorAmpm());
+		ps.setInt(4, doctorSchedule.getDoctorStatus());
+		
+		int rowcount = ps.executeUpdate();
+		return rowcount;
+		} catch (SQLException e) {
+			System.out.println("insert DoctorSchedule failure in dao");
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+
+	@Override
+	public int update(DoctorSchedule doctorSchedule) {
+		String sql ="UPDATE DOCTOR_SCHEDULE SET DOCTOR_SCHEDULE_DATE = ?, DOCTOR_AMPM = ? , DOCTOR_STATUS = ? WHERE DOCTOR_ID= ?;";
+		try ( Connection connection =  dataSource.getConnection();){
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setDate(1, doctorSchedule.getDoctorScheduleDate());
+		ps.setString(2, doctorSchedule.getDoctorAmpm());
+		ps.setInt(3, doctorSchedule.getDoctorStatus());
+		ps.setInt(4, doctorSchedule.getDoctorId());
+		
+		int rowcount = ps.executeUpdate();
+		return rowcount;
+		} catch (SQLException e) {
+			System.out.println("update DoctorSchedule failure in dao");
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	
 	
 

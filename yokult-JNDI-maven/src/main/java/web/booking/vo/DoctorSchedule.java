@@ -19,12 +19,16 @@ public class DoctorSchedule implements Serializable {
 	
 //	@Column(name = "DOCTOR_ALPHABET")
 	private String doctorAlphabet;
+	
 //	@Column(name = "DOCTOR_ID")
 	private Integer doctorId;
+	
 //	@Column(name = "DOCTOR_SCHEDULE_DATE")
 	private java.sql.Date doctorScheduleDate;
+	
 //	@Column(name = "DOCTOR_AMPM")
 	private String doctorAmpm;
+	
 //	@Column(name = "DOCTOR_STATUS")
 	private Integer doctorStatus;
 	
@@ -71,7 +75,7 @@ public class DoctorSchedule implements Serializable {
 	public void setDoctorAmpm(String doctorAmpm) {
 		this.doctorAmpm = doctorAmpm;
 	}
-	public Integer isDoctorStatus() {
+	public Integer getDoctorStatus() {
 		return doctorStatus;
 	}
 	public void setDoctorStatus(Integer doctorStatus) {

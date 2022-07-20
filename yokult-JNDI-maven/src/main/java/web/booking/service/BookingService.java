@@ -29,5 +29,7 @@ public interface BookingService {
 	//取消預約
 	public int patientCancel(Patient patient) throws NamingException;
 	
-
+	//查詢列出病患身份證字號為? getCheckinCondition=1 的病患所有欄位 的病歷資料
+	public List<Patient> getChart(Patient patient) throws NamingException;
+	
 }

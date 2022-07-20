@@ -155,6 +155,27 @@ public class PatientDAOImpl implements PatientDAO {
 		return null;
 	}
 
+	@Override
+	public List<Patient> selectAll() {
+		String sql = "SELECT SERIAL_NUMBER, MEMID, PATIENT_IDCARD, BOOKING_DATE, AMPM, BOOKING_NUMBER, DOCTOR_ALPHABET, DOCTOR_ID, CHECKIN_CONDITION ,CHART FROM PATIENT ";
+		try(Connection connection = dataSource.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			List<Patient> list = new ArrayList<Patient>();
+			while(rs.next()) {
+				Patient vo = new Patient(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getString(10));
+				list.add(vo);
+			}
+			return list;
+			
+		} catch (SQLException e) {
+			System.out.println("selectPatientALL failure");
+			e.printStackTrace();
+		}
+				
+		return null;
+	}
+
 
 
 }

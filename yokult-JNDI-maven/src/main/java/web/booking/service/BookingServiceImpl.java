@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
 		List<DoctorSchedule> listDr = new DoctorScheduleDAOImpl().selectDoctorSchedule(date1, date2, doctorId);
 		String drName = new DoctorDAOImpl().selectDoctorNameById(doctorId);
 		
-		Map map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", listDr);
 		map.put("name", drName);
 		return map;
@@ -98,7 +98,7 @@ public class BookingServiceImpl implements BookingService {
 		List<DoctorSchedule> listDr = new DoctorScheduleDAOImpl().selectDoctorSchedule(java.sql.Date.valueOf(date1), java.sql.Date.valueOf(date2), Integer.valueOf(doctorId));
 		String drName = new DoctorDAOImpl().selectDoctorNameById(Integer.valueOf(doctorId));
 		
-		Map map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", listDr);
 		map.put("name", drName);
 		return map;
@@ -119,6 +119,15 @@ public class BookingServiceImpl implements BookingService {
 				return list;
 			}
 		}
+		return null;
+	}
+	
+	//查詢列出病患身份證字號為? getCheckinCondition=1 的病患所有欄位 的病歷資料
+	@Override
+	public List<Patient> getChart(Patient patient) throws NamingException {
+		PatientDAOImpl dao = new PatientDAOImpl();
+		patient.setBookingNumber(1);
+		dao.selectPatientBymemId(patient);
 		return null;
 	}
 	
