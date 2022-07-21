@@ -1,4 +1,20 @@
 $(function () {
+//========填入資料庫時刻表
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //====彈跳視窗=====
   // 開啟 Modal 彈跳視窗
   $("button.btn_modal").on("click", function () {
