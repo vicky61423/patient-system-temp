@@ -169,10 +169,10 @@
       style="width: 60%; margin: auto"
       data-wow-delay="0.6s"
     >
-      <h1 class="text-white mb-4">請輸入預約查詢資料</h1>
+      <h1 class="text-white mb-4">請輸入驗證碼以查詢資料</h1>
       <form method="post" action="#">
         <div class="row g-3">
-          <div class="col-12 col-sm-6">
+          <!-- <div class="col-12 col-sm-6">
             <input
               type="text"
               name="IDcard"
@@ -195,7 +195,7 @@
                 style="height: 55px; position: relative"
               />
             </div>
-          </div>
+          </div> -->
           <div class="col-12 col-sm-6">
             <input
               type="text"
@@ -209,7 +209,7 @@
           <!-- <div style="display: inline-block;"> -->
           <!-- </div> -->
           <div class="col-12">
-            <button class="btn btn-dark w-100 py-3" type="submit">
+            <button class="bookingQuery btn btn-dark w-100 py-3" type="button">
               按我查詢
             </button>
           </div>
@@ -225,47 +225,9 @@
       </div>
       <div class="card-body">
         <!-- 一筆資料 -->
-        <div id="cancelDiv" class="input-group mb-3">
+        <div class="cancelth input-group mb-3">
           <div class="input-group-prepend">
-            <button id="cancelBtn" type="button" class="btn btn-danger">
-              取消預約
-            </button>
-          </div>
-          <!-- /btn-group -->
-
-          <input
-            type="text"
-            class="form-control"
-            placeholder="預約日期"
-            readonly
-          />
-          <input
-            type="text"
-            class="form-control"
-            placeholder="預約時段"
-            readonly
-          />
-          <input
-            type="text"
-            class="form-control"
-            placeholder="預約醫師"
-            readonly
-          />
-          <input
-            type="text"
-            class="form-control"
-            placeholder="預約號碼"
-            readonly
-          />
-        </div>
-        <!-- /input-group -->
-        <!-- 一筆資料結束 -->
-        <!-- 一筆資料 -->
-        <div id="cancelDiv" class="input-group mb-3">
-          <div class="input-group-prepend">
-            <button id="cancelBtn" type="button" class="btn btn-danger">
-              取消預約
-            </button>
+            <button id="" type="button" class="btn btn-info">查詢列表</button>
           </div>
           <!-- /btn-group -->
 
@@ -301,14 +263,14 @@
     </div>
     <!-- /.card -->
     <!-- 查詢結果結束 -->
-    <!-- 燈箱 -->
+    <!-- 燈箱 1-->
     <div class="overlay">
       <article style="width: 340px">
-        <h1>確定取消預約?</h1>
+        <!-- <h1>確定取消預約?</h1>
         <button type="button" class="btn_modal_close canceltrue">
           確定取消
         </button>
-        <button type="button" class="btn_modal_close cancelfalse">保留</button>
+        <button type="button" class="btn_modal_close cancelfalse">保留</button> -->
       </article>
     </div>
 

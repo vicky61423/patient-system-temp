@@ -4,7 +4,7 @@ $(function () {
   //======點擊畫面帶入======
   let package = {}; //暫時裝資料用的package
   $("div.weekBookingTime a").on("click", function () {
-    console.log(this);
+    // console.log(this);
     let getSpan = $(this).closest("div.week").find("div.th span");
     let getYear = $(getSpan).find("input").val();
     let getDate = $(getSpan)
@@ -27,11 +27,14 @@ $(function () {
 
   //======彈跳視窗=====
   // 開啟 Modal 彈跳視窗
+
   $("button.btn_modal").on("click", function () {
+    // if ($("*:invalid") == 0) {
     $("div.overlay").fadeIn();
 
     //發送bookingajax
     ajaxForBooking(package);
+    // }
   });
 
   // 關閉 Modal
@@ -367,20 +370,42 @@ $(function () {
           $("div.overlay article")
             .find("p")
             .html(
-              `<h3>掛號成功</h3>身分證字號：${$(
-                "input#IDcard"
-              ).val()}<br>掛號醫師：${package.dorctorName}<br>掛號日期：${
-                package.bookingDate
-              }<br>掛號時段：${package.amPm}<br>就診號碼：${data.bookingNumber}`
+              `<h3>掛號成功</h3>姓名：${$(
+                "input#yourname"
+              ).val()}<br>身分證字號：${$("input#IDcard").val()}<br>掛號醫師：${
+                package.dorctorName
+              }<br>掛號日期：${package.bookingDate}<br>掛號時段：${
+                package.amPm
+              }<br>就診號碼：${data.bookingNumber}`
             );
-        }
-        if (data.msg == "receiveBookingRequest failure") {
+        } else if (data.msg == "receiveBookingRequest failure") {
           $("div.overlay article")
             .find("p")
             .html(
               `<h3>掛號失敗 當日重複掛號</h3>身分證字號：${$(
                 "input#IDcard"
               ).val()}<br>掛號日期：${package.bookingDate}
+                `
+            );
+        } else if (data.msg == "IDCARD didn't key in") {
+          $("div.overlay article")
+            .find("p")
+            .html(
+              `<h3>身分證字號未填寫完成</h3>
+                `
+            );
+        } else if (data.msg == "TIME didn't key in") {
+          $("div.overlay article")
+            .find("p")
+            .html(
+              `<h3>掛號日期未選取</h3>
+                `
+            );
+        } else if (data.msg == "PatientIdcard wrong format") {
+          $("div.overlay article")
+            .find("p")
+            .html(
+              `<h3>身分證字號格式錯誤</h3>
                 `
             );
         }

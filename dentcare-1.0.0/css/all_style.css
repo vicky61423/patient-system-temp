@@ -37,6 +37,10 @@ div.card-header h3.card-title {
   color: white;
   text-align: center;
 }
+div.card-body div.cancelDiv input,
+div.card-body div.cancelth input {
+  text-align: center;
+}
 /*patientNowNum start*/
 table.drCall th {
   background-color: #06a3da;
