@@ -1,24 +1,37 @@
 $(function () {
-//========填入資料庫時刻表
+  init();
 
+  //======點擊畫面帶入======
+  let package = {}; //暫時裝資料用的package
+  $("div.weekBookingTime a").on("click", function () {
+    console.log(this);
+    let getSpan = $(this).closest("div.week").find("div.th span");
+    let getYear = $(getSpan).find("input").val();
+    let getDate = $(getSpan)
+      .text()
+      .substring(0, $(getSpan).text().indexOf("("));
+    let date = getYear + "/" + getDate.replace(/ /g, "");
+    date = date.replace(/\//g, "-");
+    let ampm = $(this).text().substring(0, 1);
+    let doctorId = 1;
+    // console.log(ampm);
+    package.bookingDate = date;
+    package.amPm = ampm;
+    package.doctorId = doctorId;
+    package.dorctorName = $("span.drName").text();
+    // console.log($("input[name='dr']"));
+    $("input[name='dr']").val(`${package.dorctorName}`);
+    $("input[name='bookingDate']").val(`${package.bookingDate}`);
+    $("input[name='bookingTime']").val(`${package.amPm}`);
+  });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //====彈跳視窗=====
+  //======彈跳視窗=====
   // 開啟 Modal 彈跳視窗
   $("button.btn_modal").on("click", function () {
     $("div.overlay").fadeIn();
+
+    //發送bookingajax
+    ajaxForBooking(package);
   });
 
   // 關閉 Modal
@@ -107,7 +120,7 @@ $(function () {
     return map;
   }
 
-  //===下拉選單方法執行填入===
+  //===下拉選單填入日期  執行填入===
   const now = new Date();
   let weekMap = weekDate(now);
   $("select.selectDate")
@@ -125,6 +138,7 @@ $(function () {
   $("select.selectDate").on("change", function () {
     let dateObjectBaseline;
     let sevenDayMillis = 7 * 24 * 60 * 60 * 1000;
+    let sixDayMillis = 6 * 24 * 60 * 60 * 1000;
     if ($("select.selectDate option.week1").prop("selected")) {
       dateObjectBaseline = now;
     } else if ($("select.selectDate option.week2").prop("selected")) {
@@ -135,6 +149,14 @@ $(function () {
       dateObjectBaseline = new Date(now.getTime() + 3 * sevenDayMillis);
     }
     trWrite(dateObjectBaseline);
+    // console.log($("select.selectDate option:selected").text());
+    let str = $("select.selectDate option:selected").text();
+
+    let date1 = str.substring(0, str.indexOf(" "));
+    let date2 = str.substring(str.lastIndexOf(" ") + 1);
+    // console.log(date1);
+    // console.log(date2);
+    ajaxForScheduleDrname(date1, date2);
   });
 
   //===========自動填入星期相關方法==============
@@ -156,6 +178,7 @@ $(function () {
         let text = thisWeekDateTextMap[index + 1];
         let text2 = thisWeekDateChineseMap[index + 1];
         $(item).html(`<span>${text}<br>(${text2})</span>`);
+        // $(item).after("")
       });
 
     // $("tr.chineseWeekDay")
@@ -178,7 +201,9 @@ $(function () {
   function getThisWeekEverydayDateText(thisWeekDateObjectMap) {
     let thisWeekDateTextMap = new Map();
     for (let i = 1; i < 7; i++) {
-      let str = `${
+      let str = `<input type="hidden" value="${thisWeekDateObjectMap[
+        i
+      ].getFullYear()}">${
         thisWeekDateObjectMap[i].getMonth() + 1
       } / ${thisWeekDateObjectMap[i].getDate()}`;
       thisWeekDateTextMap[i] = str;
@@ -209,7 +234,7 @@ $(function () {
   function getChineseWeekDay(thisWeekDateObjectMap) {
     let thisWeekDateChineseMap = new Map();
     for (let i = 1; i < 7; i++) {
-      console.log(thisWeekDateObjectMap[i]);
+      // console.log(thisWeekDateObjectMap[i]);
       let n = thisWeekDateObjectMap[i].getDay();
       switch (n) {
         case 1:
@@ -236,5 +261,130 @@ $(function () {
       }
     }
     return thisWeekDateChineseMap;
+  }
+
+  //======init填入醫師看診時段======
+  function init() {
+    let date = new Date();
+    let year = date.getFullYear();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    //回傳自1970/01/01至今的毫秒數
+    let todayMillis = date.getTime();
+    let sixDayMillis = 6 * 24 * 60 * 60 * 1000;
+    let this_week_end = new Date(todayMillis + sixDayMillis);
+
+    let date1 = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`;
+    let date2 = `${this_week_end.getFullYear()}-${
+      this_week_end.getMonth() + 1
+    }-${this_week_end.getDate()}`;
+
+    $("div.weekBookingTime div.week").find("a").addClass("disabled");
+
+    ajaxForScheduleDrname(date1, date2);
+  }
+
+  function ajaxForScheduleDrname(date1, date2) {
+    $.ajax({
+      url: "http://localhost:8080/Proj_Yokult/api/0.01/booking/drSchedule", // 資料請求的網址
+      type: "GET", // GET | POST | PUT | DELETE | PATCH
+      data: {
+        date1: date1,
+        date2: date2,
+        doctorId: 1,
+      }, // 將物件資料(不用雙引號) 傳送到指定的 url
+      dataType: "json", // 預期會接收到回傳資料的格式： json | xml | html
+      success: function (data) {
+        $("span.drName").text(data.schedule.name + "醫師");
+        //判斷最後兩個數字
+        //歸零
+        $("div.weekBookingTime div.week").find("a").addClass("disabled");
+        $.each(data.schedule.list, function (i, listitem) {
+          //listitem印出{doctorScheduleDate: '2022-07-22', doctorAmpm: '早'}
+          $.each(
+            $("div.weekBookingTime div.th").children("span"),
+            function (index, item) {
+              // console.log($(item).text());
+              let str = $(item)
+                .text()
+                .substring(
+                  $(item).text().lastIndexOf(" ") + 1,
+                  $(item).text().indexOf("(")
+                );
+
+              if (listitem.doctorScheduleDate.substring(8) == str) {
+                let ampm = listitem.doctorAmpm;
+                switch (ampm) {
+                  case "早":
+                    $(item)
+                      .closest("div.week")
+                      .find("a")
+                      .eq(0)
+                      .removeClass("disabled");
+                    break;
+                  case "午":
+                    $(item)
+                      .closest("div.week")
+                      .find("a")
+                      .eq(1)
+                      .removeClass("disabled");
+                    break;
+                  case "晚":
+                    $(item)
+                      .closest("div.week")
+                      .find("a")
+                      .eq(2)
+                      .removeClass("disabled");
+                    break;
+                }
+              }
+            }
+          );
+        });
+      },
+    });
+  }
+
+  //======= Booking的ajax
+  function ajaxForBooking(package) {
+    $.ajax({
+      url: "http://localhost:8080/Proj_Yokult/api/0.01/booking/receiveBookingRequest", // 資料請求的網址
+      type: "POST", // GET | POST | PUT | DELETE | PATCH
+      data: JSON.stringify({
+        patientIdcard: $("input#IDcard").val(),
+        bookingDate: package.bookingDate,
+        amPm: package.amPm,
+        doctorId: package.doctorId,
+      }), // 將物件資料(不用雙引號) 傳送到指定的 url
+      dataType: "json", // 預期會接收到回傳資料的格式： json | xml | html
+      success: function (data) {
+        console.log(data.msg);
+        if (data.msg == "receiveBookingRequest success") {
+          $("div.overlay article")
+            .find("p")
+            .html(
+              `<h3>掛號成功</h3>身分證字號：${$(
+                "input#IDcard"
+              ).val()}<br>掛號醫師：${package.dorctorName}<br>掛號日期：${
+                package.bookingDate
+              }<br>掛號時段：${package.amPm}<br>就診號碼：${data.bookingNumber}`
+            );
+        }
+        if (data.msg == "receiveBookingRequest failure") {
+          $("div.overlay article")
+            .find("p")
+            .html(
+              `<h3>掛號失敗 當日重複掛號</h3>身分證字號：${$(
+                "input#IDcard"
+              ).val()}<br>掛號日期：${package.bookingDate}
+                `
+            );
+        }
+      },
+    });
   }
 });

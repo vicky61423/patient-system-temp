@@ -9,13 +9,11 @@
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <p id="p"></p>
+
     <script>
-      function weekDate(date) {
+      function init() {
+        let date = new Date();
         let year = date.getFullYear();
-        let one_day = 86400000;
-        //回傳星期幾
-        let day = date.getDay();
-        // 設時間為0:0:0
         date.setHours(0);
         date.setMinutes(0);
         date.setSeconds(0);
@@ -23,76 +21,45 @@
         //回傳自1970/01/01至今的毫秒數
         let todayMillis = date.getTime();
         let sixDayMillis = 6 * 24 * 60 * 60 * 1000;
-        let sevenDayMillis = 7 * 24 * 60 * 60 * 1000;
-
         let this_week_end = new Date(todayMillis + sixDayMillis);
 
-        let next_week_start = new Date(todayMillis + sevenDayMillis);
-
-        let next_week_end = new Date(next_week_start.getTime() + sixDayMillis);
-
-        let next_2week_start = new Date(
-          next_week_start.getTime() + sevenDayMillis
-        );
-        let next_2week_end = new Date(
-          next_2week_start.getTime() + sixDayMillis
-        );
-
-        let next_3week_start = new Date(
-          next_2week_start.getTime() + sevenDayMillis
-        );
-        let next_3week_end = new Date(
-          next_3week_start.getTime() + sixDayMillis
-        );
-
-        console.log(date);
-        console.log(this_week_end);
-        console.log(next_week_start);
-        console.log(next_week_end);
-
-        console.log(next_2week_start);
-        console.log(next_2week_end);
-
-        let thisWeek = `${date.getFullYear()}/${
+        let dateFirst = `${date.getFullYear()}-${
           date.getMonth() + 1
-        }/${date.getDate()} - ${this_week_end.getFullYear()}/${
+        }-${date.getDate()}`;
+        let dateLast = `${this_week_end.getFullYear()}-${
           this_week_end.getMonth() + 1
-        }/${this_week_end.getDate()}`;
+        }-${this_week_end.getDate()}`;
 
-        let nextWeek = `${next_week_start.getFullYear()}/${
-          next_week_start.getMonth() + 1
-        }/${next_week_start.getDate()} - ${next_week_end.getFullYear()}/${
-          next_week_end.getMonth() + 1
-        }/${next_week_end.getDate()}`;
+        $.ajax({
+          url: "http://localhost:8081/yokult-jdbc-servlet/BookingServlet", // 資料請求的網址
+          type: "POST", // GET | POST | PUT | DELETE | PATCH
+          //傳送 JSON 格式資料，使用 JSON.stringify()將物件資料字串化 變JSON：
+          data: JSON.stringify({
+            date1: dateFirst,
+            date2: dateLast,
+            doctorId: 1,
+          }), // 將物件資料(不用雙引號) 傳送到指定的 url
+          dataType: "json", // 預期會接收到回傳資料的格式： json | xml | html
+          success: function (data) {
+            // request 成功取得回應後執行
+            console.log(data);
+            console.log(data);
 
-        let next2Week = `${next_2week_start.getFullYear()}/${
-          next_2week_start.getMonth() + 1
-        }/${next_2week_start.getDate()} - ${next_2week_end.getFullYear()}/${
-          next_2week_end.getMonth() + 1
-        }/${next_2week_end.getDate()}`;
-
-        let next3Week = `${next_3week_start.getFullYear()}/${
-          next_3week_start.getMonth() + 1
-        }/${next_3week_start.getDate()} - ${next_3week_end.getFullYear()}/${
-          next_3week_end.getMonth() + 1
-        }/${next_3week_end.getDate()}`;
-
-        var map = new Map();
-        map["thisWeek"] = thisWeek;
-        map["nextWeek"] = nextWeek;
-        map["next2Week"] = next2Week;
-        map["next3Week"] = next3Week;
-
-        return map;
+            console.log("ajax success");
+          },
+          error: function (xhr) {
+            // request 發生錯誤的話執行
+            console.log(xhr);
+            console.log("ajax error");
+          },
+          complete: function (xhr) {
+            // request 完成之後執行(在 success / error 事件之後執行)
+            console.log(xhr);
+            console.log("ajax finish");
+          },
+        });
       }
-
-      //本周
-      let now = new Date();
-      let weekMap = weekDate(now);
-      console.log(weekMap["thisWeek"]);
-      console.log(weekMap["nextWeek"]);
-      console.log(weekMap["next2Week"]);
-      console.log(weekMap["next3Week"]);
+      init();
     </script>
   </body>
 </html>
