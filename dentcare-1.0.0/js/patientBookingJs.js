@@ -1,8 +1,87 @@
 $(function () {
   init();
-
-  //======點擊畫面帶入======
+  sessionStorage.setItem("account", "TGA001");
+  sessionStorage.setItem("memName", "吳小儒");
+  let memIdLogin = sessionStorage.getItem("account");
+  let memName = sessionStorage.getItem("memName");
   let package = {}; //暫時裝資料用的package
+  $("input#yourname").val(`${memName}`);
+  //==取消enter==
+  $(document).keydown(function (event) {
+    switch (event.keyCode) {
+      case 13:
+        return false;
+    }
+  });
+  //=======用memid查詢身分證===登入狀態 如果幫你填  如果沒來過初診 預設初診===
+
+  //==========初診複診選單==============
+  // $("input#double").on("click", function () {
+  //   if ($("input#double").prop("checked")) {
+  //     $("input#yourname").css("display", "none");
+  //     $("input#IDcard").attr("type", "hidden");
+  //     $("input#IDcard").val(`${package.patientIdcard}`);
+  //     console.log(package.patientIdcard);
+  //   } else {
+  //     $("input#yourname").css("display", "");
+  //     $("input#IDcard").css("display", "");
+  //   }
+  // });
+  // $("input#single").on("click", function () {
+  //   if ($("input#single").prop("checked")) {
+  //     $("input#yourname").css("display", "");
+  //     $("input#yourname").val(`您的會員編號：${memIdLogin}`);
+  //     $("input#IDcard").attr("type", "text");
+  //     $("input#IDcard").val("");
+  //   }
+  // });
+
+  function getID(memIdLogin) {
+    if (memIdLogin != null) {
+      $.ajax({
+        url: "http://localhost:8080/Proj_Yokult/api/0.01/booking/bookingQuery",
+        type: "GET",
+        data: {
+          memID: memIdLogin,
+        },
+        dataType: "json",
+        success: function (data) {
+          // console.log(data);
+          //=====判斷為初診
+          if (data.msg == "you have no unchecked booking data") {
+            // alert("無就診紀錄，請選擇初診，並填寫身分證字號，感謝您");
+            $("input#single").prop("checked", true);
+            $("input#double").prop("checked", false);
+            $("input#double").prop("disabled", true);
+            $("input#yourname").attr("type", "text");
+            $("input#IDcard").attr("type", "text");
+            $("input#IDcard").attr("readonly", false);
+          }
+          //=====判斷為複診
+          if (data.msg == "bookingQuery sucess") {
+            console.log(data.list[0].patientIdcard);
+            let id = data.list[0].patientIdcard;
+            package.patientIdcard = id;
+            $("input#single").prop("checked", false);
+            $("input#single").prop("disabled", true);
+            $("input#double").prop("checked", true);
+
+            $("input#yourname").attr("type", "hidden");
+            $("input#IDcard").attr("type", "hidden");
+            $("input#IDcard").val(`${package.patientIdcard}`);
+            // $("input#IDcard").attr("readonly", true);
+          }
+        },
+      });
+    }
+  }
+  // console.log("====");
+  // console.log(getID(memIdLogin)); //undefined
+  // console.log("====");
+  getID(memIdLogin);
+  //======點擊畫面帶入======
+
+  // let memIdLogin = sessionStorage.getItem("account");
   $("div.weekBookingTime a").on("click", function () {
     // console.log(this);
     let getSpan = $(this).closest("div.week").find("div.th span");
@@ -44,23 +123,6 @@ $(function () {
 
   $("div.overlay > article").on("click", function (e) {
     e.stopPropagation();
-  });
-
-  //==========初診複診選單==============
-  $("input#double").on("click", function () {
-    if ($("input#double").prop("checked")) {
-      $("input#yourname").css("display", "none");
-      $("input#IDcard").css("display", "none");
-    } else {
-      $("input#yourname").css("display", "");
-      $("input#IDcard").css("display", "");
-    }
-  });
-  $("input#single").on("click", function () {
-    if ($("input#single").prop("checked")) {
-      $("input#yourname").css("display", "");
-      $("input#IDcard").css("display", "");
-    }
   });
 
   // ===============下一周下拉選單==========
@@ -353,11 +415,13 @@ $(function () {
   }
 
   //======= Booking的ajax
-  function ajaxForBooking(package) {
+  function ajaxForBooking() {
+    // $("div.overlay").fadeIn();
     $.ajax({
       url: "http://localhost:8080/Proj_Yokult/api/0.01/booking/receiveBookingRequest", // 資料請求的網址
       type: "POST", // GET | POST | PUT | DELETE | PATCH
       data: JSON.stringify({
+        memID: memIdLogin,
         patientIdcard: $("input#IDcard").val(),
         bookingDate: package.bookingDate,
         amPm: package.amPm,
@@ -411,5 +475,6 @@ $(function () {
         }
       },
     });
+    return false;
   }
 });

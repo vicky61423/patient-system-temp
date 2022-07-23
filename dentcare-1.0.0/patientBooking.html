@@ -348,17 +348,18 @@
         <!-- 掛號資訊填寫開始 -->
         <div class="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" style="width:900px; margin:auto;"data-wow-delay="0.6s">
                         <h1 class="text-white mb-4">掛號資訊確認</h1>
-                        <form method="post" action="" >
+                        <!-- <form onsubmit="return false" >  配上button submit 就能啟動html5驗證  -->
+                        <form onsubmit="return false" > 
                             <div class="row g-3" >
                                 <div class="col-12 col-sm-6">
                                     <!-- <div class="form-check"> -->
                                         <input id="single" class="form-check-input" type="radio" name="radio1" checked>
-                                        <label for="single" class="form-check-label">初診</label>
+                                        <label for="single" class="">初診</label>
                                     <!-- </div> -->
                                     <!-- <div class="form-check"> -->
                                         
                                         <input  id="double" class="form-check-input" type="radio" name="radio1">
-                                        <label for="double" class="form-check-label">複診</label>
+                                        <label for="double" class="">複診</label>
                                     <!-- </div> -->
                                 </div>                                
                                 <div class="col-12 col-sm-6">
@@ -384,10 +385,10 @@
                                    <hr>
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <input id="yourname" type="text" name="name" class="form-control bg-light border-0" placeholder="您的姓名" style="height: 55px;" required>
+                                    <input id="yourname" type="text" name="name" class="form-control bg-light border-0" placeholder="您的姓名" style="height: 55px;" readonly>
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <input id="IDcard" type="text" name="IDcard" class="form-control bg-light border-0" placeholder="您的身分證字號" style="height: 55px;" required>
+                                    <input id="IDcard" type="text" name="IDcard" class="form-control bg-light border-0" placeholder="您的身分證字號" style="height: 55px;" required pattern="[A-Z]{1}[1-2]{1}[0-9]{8}">
                                 </div>
                                 <!-- <div class="col-12 col-sm-6">
                                     <div class="date" id="date1" data-target-input="nearest">

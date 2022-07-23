@@ -3,26 +3,13 @@
 }
 
 /* patientCheckIn */
-@media (max-width: 991px) {
-  .section-title h5::before {
-    position: absolute;
-    content: "";
-    width: 0px;
-    height: 3px;
-    right: -55px;
-    bottom: 11px;
-    background: var(--primary);
-  }
 
-  .section-title h5::after {
-    position: absolute;
-    content: "";
-    width: 0px;
-    height: 3px;
-    right: -75px;
-    bottom: 11px;
-    background: var(--secondary);
-  }
+.section-title h5::before,
+.section-title h5::after {
+  display: none;
+}
+@media (max-width: 991px) {
+ 
 
   #QRcodeDiv {
     display: none;

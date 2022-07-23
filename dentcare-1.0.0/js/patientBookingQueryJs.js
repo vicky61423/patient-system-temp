@@ -1,7 +1,18 @@
 $(function () {
-  //如何拿到已登入者的ID~~~~~ 醫師姓名還沒做~~~~
-  let memIdLogin = "TGA001";
+  sessionStorage.setItem("account", "TGA001");
+  sessionStorage.setItem("memName", "吳小儒");
+  let memIdLogin = sessionStorage.getItem("account");
+  let memName = sessionStorage.getItem("memName");
+  //如何拿到已登入者的ID~~~ sessionStorage.getItem("account")
+  // let memIdLogin = "TGA001"
   let package = {};
+  //==取消enter==
+  $(document).keydown(function (event) {
+    switch (event.keyCode) {
+      case 13:
+        return false;
+    }
+  });
   //查詢預約
   // console.log($("button.bookingQuery"));
   $("button.bookingQuery").on("click", function () {

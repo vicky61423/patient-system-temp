@@ -203,9 +203,9 @@
                                     <div class="col-12">
                                         <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>輸入身分證報到</h5>
                                         <br>
-                                        <input type="text" class="form-control border-0 bg-light px-3" placeholder="請輸入身分證字號" style="height: 55px;width: 67%;" >
+                                        <input type="text" class="Idcard form-control border-0 bg-light px-3" placeholder="請輸入身分證字號" style="height: 55px;width: 67%;" >
                                         <br><br><br>
-                                        <a href="appointment.html" class="btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">現場就診報到入口</a>
+                                        <a class="checkIn btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">現場就診報到入口</a>
                                         <!-- a標籤綁定click事件 選擇到form表單呼叫.submit()方法 -->
 
                                     </div>
@@ -215,7 +215,7 @@
                                 <div id="QRcodeDiv" class="col-sm-6 wow zoomIn" data-wow-delay="0.6s">
                                     <h5 class="mb-3"><i class="fa fa-check-circle text-primary me-3"></i>掃描QRcode報到</h5>
                                     <img class="QRCODE" data-wow-delay="0.9s" src="img/QRCODE.png" style="width: 170px">
-                                    <a href="appointment.html" class="btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">視訊看診報到入口</a>                             
+                                    <a  class="btn btn-primary py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">視訊看診報到入口</a>                             
 
                                 </div>
                                 <!-- /QRCODE -->
@@ -234,7 +234,14 @@
             </div>
         </form>
         <!-- 報到 End -->
-
+        <!-- 燈箱 -->
+            <div class="overlay">
+                <article>
+                    <h1></h1>
+                    <p></p>
+                    <button type="button" class="btn_modal_close ">確認</button>
+                </article>
+            </div>
         
     
         
@@ -418,5 +425,7 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <!-- Vicky's js -->
+        <script src="js/patientCheckInJs.js"></script>
     </body>
 </html>
