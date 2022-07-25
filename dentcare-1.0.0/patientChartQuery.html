@@ -169,7 +169,7 @@
       style="width: 800px; margin: auto"
       data-wow-delay="0.6s"
     >
-      <h1 class="text-white mb-4">請輸入就診紀錄查詢資料</h1>
+      <h1 class="text-white mb-4">請選擇就診紀錄查詢資料</h1>
       <form method="post" action="#">
         <!-- <div class="row g-3" >
                     <div class="col-12 col-sm-6">
@@ -184,11 +184,9 @@
         <!-- 下拉選單 -->
         <div class="row g-3">
           <div class="col-12 col-sm-6">
-            <select class="form-select bg-light border-0" style="height: 55px">
-              <option selected>選擇看診日期</option>
-              <option value="1">Service 1</option>
-              <option value="2">Service 2</option>
-              <option value="3">Service 3</option>
+            <select class="chart form-select bg-light border-0" style="height: 55px">
+              <option selected>請選擇看診日期</option>
+
             </select>
           </div>
           <!-- 如果想加入醫師查詢 交互查詢  就要搭配長的按鈕 -->
@@ -202,7 +200,7 @@
           </div> -->
           <!-- 短的按鈕 -->
           <div class="col-6">
-            <button class="btn btn-dark w-100 py-3" type="button">
+            <button class="chartQuery btn btn-dark w-100 py-3" type="button">
               按我查詢
             </button>
           </div>
@@ -228,7 +226,7 @@
         <div class="col-12">
           <input
             type="text"
-            class="form-control border-0 bg-light px-4"
+            class="drName form-control border-0 bg-light px-4"
             placeholder="看診醫師"
             style="height: 55px"
             readonly
